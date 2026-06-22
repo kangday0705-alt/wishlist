@@ -14,7 +14,7 @@ class Checklist {
 private:
 
   string check;
-  bool isCheckAchieved;  // 체크리스트 달성
+  bool isCheckAchieved = false;  // 체크리스트 달성
 
 public:
 
@@ -59,6 +59,7 @@ public:
     currBalance = 0;
     isUnlocked = false;
     isCompleted = false;
+    date = { 9999, 12, 31 };
   }
 
   void setrequiredCount(int);
