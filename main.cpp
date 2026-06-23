@@ -3,8 +3,9 @@
 #include <vector>
 #include <ctime>
 #include "Wishfunc.h"
-
 using namespace std;
+
+
 
 void Wish::setrequiredCount(int c) {
 	requiredCount = c;
@@ -89,38 +90,6 @@ int main() {
 	myWish.setBalance(1000000);
 
 	myWish.setcurrBalance(0);
-	myWish.WishUnlock();
-
-	cout << "저축액설정 " << myWish.getIsUnlocked() << endl;
-
-	myWish.setcurrBalance(1500000);
-	myWish.WishUnlock(); 
-
-	cout << "저축액달성 " << myWish.getIsUnlocked() << endl;
-
-	myWish.addchecklist("1");
-
-	myWish.setrequiredCount(2);
-
-	myWish.WishUnlock();
-	cout << "쳌리설정" << myWish.getIsUnlocked() << endl;
-
-	myWish.completecheck(0);
-	myWish.WishUnlock();
-	cout << "쳌리체크" << myWish.getIsUnlocked() << endl;
-
-	myWish.setrequiredCount(3);
-	Date dt = { 2026,6,25 };
-	myWish.setDate(dt);
-
-	myWish.WishUnlock();
-	cout << "날짜미래" << myWish.getIsUnlocked() << endl;
-
-	dt = { 2026,6,23 };
-	myWish.setDate(dt);
-
-	myWish.WishUnlock();
-	cout << "날짜오늘" << myWish.getIsUnlocked() << endl;
 
 	return 0;
 
