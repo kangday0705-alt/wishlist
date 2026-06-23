@@ -34,7 +34,7 @@ public:
 
 class Wish {
 private:
-  string name;          // 위시 이름
+ 
   int Balance;          //저축조건액
   int currBalance;
 
@@ -45,6 +45,8 @@ private:
   bool isCompleted;          // 완료 여부
 
 public:
+  string name;          // 위시 이름
+
   Wish(string namee = " ", int count = 0)
     : name(namee),
     requiredCount(count),
@@ -53,26 +55,33 @@ public:
     isUnlocked(false),
     isCompleted(false),
     date{ 9999, 12, 31 } {
-
+    WishUnlock();
   }
   void setBalance(int bal) {
     Balance = bal;
+    WishUnlock();
   }
   void setcurrBalance(int bal) {
     currBalance = bal;
+    WishUnlock();
   }
   void setDate(Date dt) {
     date = dt;
+    WishUnlock();
   }
   void setrequiredCount(int c) {
     requiredCount = c;
+    WishUnlock();
   }
-  bool getIsUnlocked() {
+  bool getIsUnlocked()const {
     return isUnlocked; 
   }
   bool getIsCompleted() {
     return isCompleted;
   }
+  //string getname() {
+  //  return name;
+  //}
 
   void addchecklist(string);
   void completecheck(int idx);
@@ -95,10 +104,16 @@ public:
     }
     return;
   }
-  //void showwishlist() const;
+  void showwishlist() const;
 
+  Wish& getwish(int idx) {
+    return wlist[idx];
+  }
   vector<Wish> getlockedwish() const;
   vector<Wish> getunlockedwish() const;
+
+  //void saveToFile();
+  //void loadFromFile();
 
 };
 

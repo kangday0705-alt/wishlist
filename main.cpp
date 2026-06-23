@@ -1,27 +1,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
+#include <fstream>
 #include <ctime>
 #include "Wishfunc.h"
 using namespace std;
 
-
-
-void Wish::setrequiredCount(int c) {
-	requiredCount = c;
-}
-
-void Wish::setBalance(int bal) {
-	Balance = bal;
-}
-
-void Wish::setcurrBalance(int bal) {
-	currBalance = bal;
-}
-
-void Wish::setDate(Date dt) {
-	date = dt;
-}
 
 void Wish::addchecklist(string cont) {
 	Checklist temp;
@@ -33,6 +17,7 @@ void Wish::completecheck(int idx) {
 	if (idx < checklist.size()) {
 		checklist[idx].checkCheck();
 	}
+	WishUnlock();
 }
 
 void Wish::WishUnlock() {
@@ -81,16 +66,79 @@ void Wish::WishUnlock() {
 	else isUnlocked = false;
 }
 
+vector<Wish> Wishlist::getlockedwish() const {
+	vector<Wish> locked;
+	for (Wish att : wlist) {
+		if (!att.getIsUnlocked()) {
+			locked.push_back(att);
+		}
+	}
+	return locked;
+}
+
+vector<Wish> Wishlist::getunlockedwish() const {
+	vector<Wish> unlocked;
+	for (Wish att : wlist) {
+		if (att.getIsUnlocked()) {
+			unlocked.push_back(att);
+		}
+	}
+	return unlocked;
+}
+
+void Wishlist::showwishlist() const {
+	for (int i = 0; i < wlist.size(); ++i) {
+		cout << i << ". " << wlist[i].name
+			<< " " << (wlist[i].getIsUnlocked() ? "해금" : "잠금") << endl;
+
+	}
+}
+
+
+
 int main() {
+	Wishlist manager;
+
+	cout << " 테스트" << endl;
+
+	Wish wish1("스위치", 2);
+	wish1.setBalance(1000000); 
+
+	Wish wish2("플스", 0); 
+	wish2.setBalance(600000);
+
+	manager.addwish(wish1);
+	manager.addwish(wish2);
+
+	manager.showwishlist();
+	cout << endl;
+
+	// 0번 원본 꺼내기
+	Wish& myPad = manager.getwish(0);
+	myPad.setcurrBalance(1000000);
+	cout << " 스위치저축완료" << endl;
+
+	myPad.addchecklist("체크");
+	myPad.completecheck(0);
+	cout << " 스위치체크리스트완료" << endl;
+	cout << endl;
+
+	manager.showwishlist();
+	cout << "\n";
+
+	
+	vector<Wish> lockedList = manager.getlockedwish();
+	vector<Wish> unlockedList = manager.getunlockedwish();
+
+	cout << "잠긴 위시: " << lockedList.size()<< endl;
+	cout << "해금 위시: " << unlockedList.size() << endl;
+	cout << "\n";
 
 
-	Wish myWish("아이패드", 1);
-
-
-	myWish.setBalance(1000000);
-
-	myWish.setcurrBalance(0);
+	cout << "플스 삭제" << endl;
+	manager.deletewish(1);
+	manager.showwishlist();
+	cout << "\n\n";
 
 	return 0;
-
 }
