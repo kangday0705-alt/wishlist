@@ -1,6 +1,7 @@
 #pragma once
 #include <ctime>
 #include <vector>
+#include <sstream>
 using namespace std;
 
 class Date {
@@ -12,12 +13,11 @@ public:
 
 class Checklist {
 private:
-
-  string check;
+  
   bool isCheckAchieved = false;  // 체크리스트 달성
 
 public:
-  string getcheck() const { return check;}
+  string check;
   bool getisCheckAchieved() {
     return isCheckAchieved;
   }
@@ -32,12 +32,13 @@ public:
   }
 };
 
+
+
+
 class Wish {
 private:
  
   int Balance;          //저축조건액
-  
-
   vector<Checklist> checklist; // 체크리스트 목록
   Date date;                   // 목표날짜
 
@@ -53,6 +54,24 @@ public:
     isUnlocked(false),
     isCompleted(false),
     date{ 0000, 00, 00 } { }
+
+  string content() {
+    stringstream con;
+    con << name << ";"
+      << Balance << ";"
+      << date.year << ";"
+      << date.month << ";"
+      << date.day << ";"
+      << isUnlocked << ";"
+      << isCompleted << ";"
+      << checklist.size() << ";";
+
+    for (Checklist& c : checklist) {
+      con << c.check << ";" << c.getisCheckAchieved() << ";";
+    }
+
+    return con.str();
+  }
 
   void setBalance(int bal, int currBalance) {
     Balance = bal;
@@ -78,48 +97,3 @@ public:
   void completecheck(int idx, int);
   void TryUnlock(int currBalance);
 };
-
-class Wishlist {
-private:
-  vector<Wish> wlist;
-  int currBalance;
-
-public:
-  Wishlist():currBalance(0){}
-
-  int getcurrBalance() const { return currBalance; }
-  void addcurrBalance(int bal) {
-    currBalance += bal;
-    updateAllwish();
-  }
-  void addwish(Wish newWish) {
-    newWish.TryUnlock(currBalance);
-    wlist.push_back(newWish);
-  }
-  void deletewish(int idx) {
-    if (idx >= 0 && idx < wlist.size()) {
-      wlist.erase(wlist.begin() + idx);
-    }
-    return;
-  }
-  void showwishlist() const;
-
-  void updateAllwish() {
-    for (Wish& w : wlist) {
-      w.TryUnlock(currBalance);
-    }
-  }
-
-  Wish& getwish(int idx) {
-    if (0 <= idx && idx < wlist.size()) {
-      return wlist[idx];
-    }
-  }
-  vector<Wish> getlockedwish() const;
-  vector<Wish> getunlockedwish() const;
-
-  //void saveToFile();
-  //void loadFromFile();
-
-};
-

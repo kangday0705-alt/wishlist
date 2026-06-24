@@ -72,30 +72,3 @@ void Wish::TryUnlock(int currBalance) {
 	if (isUnlocked == true) { cout << name << " 해금!" <<endl; }
 }
 
-vector<Wish> Wishlist::getlockedwish() const {
-	vector<Wish> locked;
-	for (Wish att : wlist) {
-		if (!att.getIsUnlocked()) {
-			locked.push_back(att);
-		}
-	}
-	return locked;
-}
-
-vector<Wish> Wishlist::getunlockedwish() const {
-	vector<Wish> unlocked;
-	for (Wish att : wlist) {
-		if (att.getIsUnlocked()) {
-			unlocked.push_back(att);
-		}
-	}
-	return unlocked;
-}
-
-void Wishlist::showwishlist() const {
-	for (int i = 0; i < wlist.size(); ++i) {
-		cout << i << ". " << wlist[i].name
-			<< " " << (wlist[i].getIsUnlocked() ? "해금" : "잠금") << endl;
-
-	}
-}

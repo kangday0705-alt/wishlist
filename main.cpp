@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "Wishfunc.h"
+#include "Wishlist.h"
 
 using namespace std;
 
