@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <ctime>
+#include <sstream>
 #include "Wishlist.h"
 using namespace std;
 
@@ -50,4 +51,22 @@ void Wishlist::saveToFile() {
 }
 
 void Wishlist::loadFromFile() {
+	ifstream inFile("wishlist.txt");
+
+	if (!inFile.is_open()) {
+		return;
+	}
+	wlist.clear();
+
+	inFile >> currBalance;
+	inFile.ignore();
+
+	string line;
+	while (getline(inFile, line)) {
+		stringstream con(line);
+		Wish twish;
+		twish.getcont(con);
+		wlist.push_back(twish);
+	}
+
 }

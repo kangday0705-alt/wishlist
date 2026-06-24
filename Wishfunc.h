@@ -2,6 +2,7 @@
 #include <ctime>
 #include <vector>
 #include <sstream>
+#include <string>
 using namespace std;
 
 class Date {
@@ -20,6 +21,9 @@ public:
   string check;
   bool getisCheckAchieved() {
     return isCheckAchieved;
+  }
+  void setisCheckAchieved(int i) {
+    isCheckAchieved = i;
   }
   void setcheck(string checkk) {
     check = checkk;
@@ -96,4 +100,27 @@ public:
   void addchecklist(string);
   void completecheck(int idx, int);
   void TryUnlock(int currBalance);
+
+  void getcont(stringstream& con) {
+    string temp;
+    getline(con, name, ';');
+    getline(con, temp, ';'); Balance = stoi(temp);
+    getline(con, temp, ';'); date.year = stoi(temp);
+    getline(con, temp, ';'); date.month = stoi(temp);
+    getline(con, temp, ';'); date.day = stoi(temp);
+    getline(con, temp, ';'); isUnlocked = stoi(temp);
+    getline(con, temp, ';'); isCompleted = stoi(temp);
+    getline(con, temp, ';');
+    int size = stoi(temp);
+
+    checklist.clear();
+    for (int i = 0; i < size; i++) {
+      Checklist c;
+      getline(con, c.check, ';');
+      getline(con, temp, ';');
+      c.setisCheckAchieved(stoi(temp));
+      checklist.push_back(c);
+    }
+  }
+
 };

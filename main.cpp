@@ -6,13 +6,17 @@ using namespace std;
 
 int main() {
   Wishlist manager;
+
+  // [중요] 프로그램이 켜지자마자 저장된 파일 정보를 자동으로 불러옵니다!
+  manager.loadFromFile();
+
   int choice = 0;
 
   while (true) {
     cout << "\n--- WISH LIST MANAGER ---" << endl;
     cout << "1. Show List" << endl;
     cout << "2. Add Wish" << endl;
-    cout << "3. Save Money (Global)" << endl; // 전체 공통 저축으로 변경
+    cout << "3. Save Money (Global)" << endl;
     cout << "4. Delete Wish" << endl;
     cout << "5. Manage Checklist (NEW!)" << endl;
     cout << "6. Exit" << endl;
@@ -20,6 +24,8 @@ int main() {
     cin >> choice;
 
     if (choice == 6) {
+      // 종료하기 직전에도 안전하게 최종 저장을 수행합니다.
+      manager.saveToFile();
       cout << "Exit Program. Bye!" << endl;
       break;
     }
@@ -38,23 +44,25 @@ int main() {
       cin >> balance;
 
       Wish newWish(name);
-      // 생성 및 추가 시 현재 매니저의 공통 잔액을 함께 전달합니다.
       newWish.setBalance(balance, manager.getcurrBalance());
 
       manager.addwish(newWish);
       cout << ">> Added successfully!" << endl;
+
+      // [추가] 위시가 새로 추가되었으므로 즉시 파일에 저장합니다.
+      manager.saveToFile();
     }
     else if (choice == 3) {
       int money;
-      // 특정 위시의 인덱스를 받지 않고, 전체 지갑에 저축하도록 변경
-      cout << "Current Total Balance: " << manager.getcurrBalance() << "元" << endl;
+      cout << "Current Balance: " << manager.getcurrBalance() << "元" << endl;
       cout << "Money to Save: ";
       cin >> money;
 
-      // 매니저의 전체 공통 잔액을 갱신 (내부에서 전체 위시 해금 상태 자동 업데이트)
       manager.addcurrBalance(money);
-
       cout << ">> Saved successfully! Total Balance: " << manager.getcurrBalance() << "元" << endl;
+
+      // [추가] 잔액이 변동되었으므로 즉시 파일에 저장합니다.
+      manager.saveToFile();
     }
     else if (choice == 4) {
       int idx;
@@ -63,6 +71,9 @@ int main() {
 
       manager.deletewish(idx);
       cout << ">> Deleted successfully!" << endl;
+
+      // [추가] 위시가 삭제되었으므로 즉시 파일에 저장합니다.
+      manager.saveToFile();
     }
     else if (choice == 5) {
       int idx, subChoice;
@@ -83,19 +94,20 @@ int main() {
         cin >> task;
         target.addchecklist(task);
         cout << ">> Task added!" << endl;
+
+        // [추가] 체크리스트 변경사항 저장
+        manager.saveToFile();
       }
       else if (subChoice == 2) {
-        int taskIdx;
-        cout << "Enter Task Index to Complete: ";
-        cin >> taskIdx;
-
-        // 체크리스트를 완료할 때도 현재 공통 잔액을 함께 넘겨주어 해금 판정을 유도합니다.
-        target.completecheck(taskIdx, manager.getcurrBalance());
+        int chkIdx;
+        cout << "Enter Checklist Index to Complete: ";
+        cin >> chkIdx;
+        target.completecheck(chkIdx, manager.getcurrBalance());
         cout << ">> Task completed!" << endl;
+
+        // [추가] 체크리스트 완료 상태 변경사항 저장
+        manager.saveToFile();
       }
-    }
-    else {
-      cout << ">> Invalid choice. Try again." << endl;
     }
   }
 
