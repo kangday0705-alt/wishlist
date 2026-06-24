@@ -1,144 +1,103 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <vector>
-#include <fstream>
-#include <ctime>
+#include <string>
 #include "Wishfunc.h"
+
 using namespace std;
 
-
-void Wish::addchecklist(string cont) {
-	Checklist temp;
-	temp.setcheck(cont);
-	checklist.push_back(temp);
-}
-
-void Wish::completecheck(int idx) {
-	if (idx < checklist.size()) {
-		checklist[idx].checkCheck();
-	}
-	WishUnlock();
-}
-
-void Wish::WishUnlock() {
-
-	int count = 0; //만족하는조건갯수
-
-	//저축액
-	if (Balance > 0 && currBalance >= Balance) {
-		count++;
-	}
-
-	//체크리스트
-	bool allcom = true;
-	for (int i = 0; i < checklist.size(); i++) {
-		if (!checklist[i].getisCheckAchieved()) {
-			allcom = false;
-			break;
-		}
-	}
-	if (!checklist.empty() && allcom == true)count++;
-
-	//날짜
-	time_t timer = time(NULL);
-	struct tm* t = localtime(&timer);
-	int todayYear = t->tm_year + 1900;
-	int todayMonth = t->tm_mon + 1;    
-	int todayDay = t->tm_mday;
-
-	if (todayYear > date.year) {
-		count++;
-	}
-	else if (todayYear == date.year) {
-		if (todayMonth > date.month) {
-			count++;
-		}
-		else if (todayMonth==date.month) {
-			if(todayDay>=date.day){
-				count++;
-			}
-		}
-	}
-
-	if (count >= requiredCount) {
-		isUnlocked = true;
-	}
-	else isUnlocked = false;
-}
-
-vector<Wish> Wishlist::getlockedwish() const {
-	vector<Wish> locked;
-	for (Wish att : wlist) {
-		if (!att.getIsUnlocked()) {
-			locked.push_back(att);
-		}
-	}
-	return locked;
-}
-
-vector<Wish> Wishlist::getunlockedwish() const {
-	vector<Wish> unlocked;
-	for (Wish att : wlist) {
-		if (att.getIsUnlocked()) {
-			unlocked.push_back(att);
-		}
-	}
-	return unlocked;
-}
-
-void Wishlist::showwishlist() const {
-	for (int i = 0; i < wlist.size(); ++i) {
-		cout << i << ". " << wlist[i].name
-			<< " " << (wlist[i].getIsUnlocked() ? "해금" : "잠금") << endl;
-
-	}
-}
-
-
-
 int main() {
-	Wishlist manager;
+  Wishlist manager;
+  int choice = 0;
 
-	cout << " 테스트" << endl;
+  while (true) {
+    cout << "\n--- WISH LIST MANAGER ---" << endl;
+    cout << "1. Show List" << endl;
+    cout << "2. Add Wish" << endl;
+    cout << "3. Save Money (Global)" << endl; // 전체 공통 저축으로 변경
+    cout << "4. Delete Wish" << endl;
+    cout << "5. Manage Checklist (NEW!)" << endl;
+    cout << "6. Exit" << endl;
+    cout << "Select: ";
+    cin >> choice;
 
-	Wish wish1("스위치", 2);
-	wish1.setBalance(1000000); 
+    if (choice == 6) {
+      cout << "Exit Program. Bye!" << endl;
+      break;
+    }
 
-	Wish wish2("플스", 0); 
-	wish2.setBalance(600000);
+    if (choice == 1) {
+      cout << "\n[ My Wish List ]" << endl;
+      manager.showwishlist();
+    }
+    else if (choice == 2) {
+      string name;
+      int balance;
 
-	manager.addwish(wish1);
-	manager.addwish(wish2);
+      cout << "Wish Name: ";
+      cin >> name;
+      cout << "Target Balance: ";
+      cin >> balance;
 
-	manager.showwishlist();
-	cout << endl;
+      Wish newWish(name);
+      // 생성 및 추가 시 현재 매니저의 공통 잔액을 함께 전달합니다.
+      newWish.setBalance(balance, manager.getcurrBalance());
 
-	// 0번 원본 꺼내기
-	Wish& myPad = manager.getwish(0);
-	myPad.setcurrBalance(1000000);
-	cout << " 스위치저축완료" << endl;
+      manager.addwish(newWish);
+      cout << ">> Added successfully!" << endl;
+    }
+    else if (choice == 3) {
+      int money;
+      // 특정 위시의 인덱스를 받지 않고, 전체 지갑에 저축하도록 변경
+      cout << "Current Total Balance: " << manager.getcurrBalance() << "元" << endl;
+      cout << "Money to Save: ";
+      cin >> money;
 
-	myPad.addchecklist("체크");
-	myPad.completecheck(0);
-	cout << " 스위치체크리스트완료" << endl;
-	cout << endl;
+      // 매니저의 전체 공통 잔액을 갱신 (내부에서 전체 위시 해금 상태 자동 업데이트)
+      manager.addcurrBalance(money);
 
-	manager.showwishlist();
-	cout << "\n";
+      cout << ">> Saved successfully! Total Balance: " << manager.getcurrBalance() << "元" << endl;
+    }
+    else if (choice == 4) {
+      int idx;
+      cout << "Wish Index to Delete: ";
+      cin >> idx;
 
-	
-	vector<Wish> lockedList = manager.getlockedwish();
-	vector<Wish> unlockedList = manager.getunlockedwish();
+      manager.deletewish(idx);
+      cout << ">> Deleted successfully!" << endl;
+    }
+    else if (choice == 5) {
+      int idx, subChoice;
+      cout << "Select Wish Index: ";
+      cin >> idx;
 
-	cout << "잠긴 위시: " << lockedList.size()<< endl;
-	cout << "해금 위시: " << unlockedList.size() << endl;
-	cout << "\n";
+      Wish& target = manager.getwish(idx);
 
+      cout << "\n[ " << target.name << " - Checklist Menu ]" << endl;
+      cout << "1. Add Checklist Item" << endl;
+      cout << "2. Complete Checklist Item" << endl;
+      cout << "Select Sub Menu: ";
+      cin >> subChoice;
 
-	cout << "플스 삭제" << endl;
-	manager.deletewish(1);
-	manager.showwishlist();
-	cout << "\n\n";
+      if (subChoice == 1) {
+        string task;
+        cout << "Enter Task Name: ";
+        cin >> task;
+        target.addchecklist(task);
+        cout << ">> Task added!" << endl;
+      }
+      else if (subChoice == 2) {
+        int taskIdx;
+        cout << "Enter Task Index to Complete: ";
+        cin >> taskIdx;
 
-	return 0;
+        // 체크리스트를 완료할 때도 현재 공통 잔액을 함께 넘겨주어 해금 판정을 유도합니다.
+        target.completecheck(taskIdx, manager.getcurrBalance());
+        cout << ">> Task completed!" << endl;
+      }
+    }
+    else {
+      cout << ">> Invalid choice. Try again." << endl;
+    }
+  }
+
+  return 0;
 }

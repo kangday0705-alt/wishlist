@@ -17,7 +17,7 @@ private:
   bool isCheckAchieved = false;  // 체크리스트 달성
 
 public:
-
+  string getcheck() const { return check;}
   bool getisCheckAchieved() {
     return isCheckAchieved;
   }
@@ -36,66 +36,64 @@ class Wish {
 private:
  
   int Balance;          //저축조건액
-  int currBalance;
+  
 
   vector<Checklist> checklist; // 체크리스트 목록
   Date date;                   // 목표날짜
-  int requiredCount;
+
   bool isUnlocked;           // 해금 여부
   bool isCompleted;          // 완료 여부
 
 public:
   string name;          // 위시 이름
 
-  Wish(string namee = " ", int count = 0)
+  Wish(string namee = " ")
     : name(namee),
-    requiredCount(count),
     Balance(0),
-    currBalance(0),
     isUnlocked(false),
     isCompleted(false),
-    date{ 9999, 12, 31 } {
-    WishUnlock();
-  }
-  void setBalance(int bal) {
+    date{ 0000, 00, 00 } { }
+
+  void setBalance(int bal, int currBalance) {
     Balance = bal;
-    WishUnlock();
+    TryUnlock(currBalance);
   }
-  void setcurrBalance(int bal) {
-    currBalance = bal;
-    WishUnlock();
-  }
-  void setDate(Date dt) {
+
+  void setDate(Date dt, int currBalance) {
     date = dt;
-    WishUnlock();
+    TryUnlock(currBalance);
   }
-  void setrequiredCount(int c) {
-    requiredCount = c;
-    WishUnlock();
-  }
+ 
   bool getIsUnlocked()const {
     return isUnlocked; 
   }
   bool getIsCompleted() {
     return isCompleted;
   }
-  //string getname() {
-  //  return name;
-  //}
 
+  vector<Checklist>& getchecklist() {
+    return checklist;
+  }
   void addchecklist(string);
-  void completecheck(int idx);
-  void WishUnlock();
+  void completecheck(int idx, int);
+  void TryUnlock(int currBalance);
 };
 
 class Wishlist {
 private:
   vector<Wish> wlist;
+  int currBalance;
 
 public:
-  Wishlist() {}
+  Wishlist():currBalance(0){}
 
-  void addwish(const Wish& newWish) {
+  int getcurrBalance() const { return currBalance; }
+  void addcurrBalance(int bal) {
+    currBalance += bal;
+    updateAllwish();
+  }
+  void addwish(Wish newWish) {
+    newWish.TryUnlock(currBalance);
     wlist.push_back(newWish);
   }
   void deletewish(int idx) {
@@ -106,8 +104,16 @@ public:
   }
   void showwishlist() const;
 
+  void updateAllwish() {
+    for (Wish& w : wlist) {
+      w.TryUnlock(currBalance);
+    }
+  }
+
   Wish& getwish(int idx) {
-    return wlist[idx];
+    if (0 <= idx && idx < wlist.size()) {
+      return wlist[idx];
+    }
   }
   vector<Wish> getlockedwish() const;
   vector<Wish> getunlockedwish() const;
