@@ -7,35 +7,25 @@
 using namespace std;
 
 
-void Wish::addchecklist(string cont) {
-	Checklist temp;
-	temp.setcheck(cont);
-	checklist.push_back(temp);
-}
-
-void Wish::completecheck(int idx, int currBalance) {
+void Wish::completeCheck(int idx, bool achieve, int currBalance) {
 	if (0 <=idx && idx < checklist.size()) {
-		checklist[idx].checkCheck();
+		checklist[idx].setisCheckAchieved(achieve);
+		tryUnlock(currBalance);
 	}
-	TryUnlock(currBalance);
 }
 
-void Wish::TryUnlock(int currBalance) {
-
-	int count = 0; //만족하는조건갯수
+void Wish::tryUnlock(int currBalance) {
 
 	//저축액
 	if (Balance == 0 && checklist.empty() && date.year == 0000) {
 		isUnlocked = false;
 		return;
 	}
-
 	if (currBalance < Balance) {
 		isUnlocked = false; return;
 	}
 
 	//체크리스트
-	//bool allcom = true;
 	if (!checklist.empty()) {
 		for (int i = 0; i < checklist.size(); i++) {
 			if (!checklist[i].getisCheckAchieved()) {
@@ -43,7 +33,6 @@ void Wish::TryUnlock(int currBalance) {
 			}
 		}
 	}
-	//if (!checklist.empty() && allcom == true)count++;
 
 	//날짜
 	time_t timer = time(NULL);
@@ -51,7 +40,6 @@ void Wish::TryUnlock(int currBalance) {
 	int todayYear = t->tm_year + 1900;
 	int todayMonth = t->tm_mon + 1;
 	int todayDay = t->tm_mday;
-
 
 	if (todayYear < date.year) {
 		isUnlocked = false; return;

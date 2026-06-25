@@ -14,7 +14,6 @@ public:
 
 class Checklist {
 private:
-  
   bool isCheckAchieved = false;  // 체크리스트 달성
 
 public:
@@ -22,17 +21,8 @@ public:
   bool getisCheckAchieved() {
     return isCheckAchieved;
   }
-  void setisCheckAchieved(int i) {
-    isCheckAchieved = i;
-  }
-  void setcheck(string checkk) {
-    check = checkk;
-  }
-  void checkCheck() {
-    isCheckAchieved = true;
-  }
-  void uncheckCheck() {
-    isCheckAchieved = false;
+  void setisCheckAchieved(bool b) {
+    isCheckAchieved = b;
   }
 };
 
@@ -45,13 +35,14 @@ private:
   int Balance;          //저축조건액
   vector<Checklist> checklist; // 체크리스트 목록
   Date date;                   // 목표날짜
-
   bool isUnlocked;           // 해금 여부
   bool isCompleted;          // 완료 여부
 
 public:
-  string name;          // 위시 이름
 
+  string name;
+
+  //이름으로 생성. 해금x완료x
   Wish(string namee = " ")
     : name(namee),
     Balance(0),
@@ -59,6 +50,35 @@ public:
     isCompleted(false),
     date{ 0000, 00, 00 } { }
 
+  void setBalance(int bal, int currBalance) {
+      Balance = bal;
+      TryUnlock(currBalance);
+    }
+  void setDate(Date dt, int currBalance) {
+    date = dt;
+    TryUnlock(currBalance);
+  }
+
+  bool getIsUnlocked()const {
+    return isUnlocked; 
+  }
+  bool getIsCompleted()const {
+    return isCompleted;
+  }
+  vector<Checklist>& getchecklist() {
+    return checklist;
+  }
+
+  void addchecklist(string cont){
+    Checklist temp;
+    temp.check = cont;
+    checklist.push_back(temp);
+  }
+  void completeCheck(int idx, bool, int);
+  void tryUnlock(int currBalance);
+
+
+  //위시의 전체 정보가 담긴 문자열
   string content() {
     stringstream con;
     con << name << ";"
@@ -76,31 +96,7 @@ public:
 
     return con.str();
   }
-
-  void setBalance(int bal, int currBalance) {
-    Balance = bal;
-    TryUnlock(currBalance);
-  }
-
-  void setDate(Date dt, int currBalance) {
-    date = dt;
-    TryUnlock(currBalance);
-  }
- 
-  bool getIsUnlocked()const {
-    return isUnlocked; 
-  }
-  bool getIsCompleted() {
-    return isCompleted;
-  }
-
-  vector<Checklist>& getchecklist() {
-    return checklist;
-  }
-  void addchecklist(string);
-  void completecheck(int idx, int);
-  void TryUnlock(int currBalance);
-
+  //위시의 전체정보 문자열 읽기
   void getcont(stringstream& con) {
     string temp;
     getline(con, name, ';');
@@ -116,10 +112,16 @@ public:
     checklist.clear();
     for (int i = 0; i < size; i++) {
       Checklist c;
-      getline(con, c.check, ';');
-      getline(con, temp, ';');
+      getline(con, c.check, ';'); //이름읽기
+      getline(con, temp, ';'); //isAchived
       c.setisCheckAchieved(stoi(temp));
       checklist.push_back(c);
+    }
+  }
+
+  void buyWish() {
+    if (isUnlocked) {
+      isCompleted = true;
     }
   }
 
