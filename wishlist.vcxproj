@@ -124,9 +124,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Wish.cpp" />
+    <ClCompile Include="Wishlist.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Wishfunc.h" />
+    <ClInclude Include="Wish.h" />
+    <ClInclude Include="Wishlist.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

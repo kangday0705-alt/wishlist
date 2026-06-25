@@ -26,12 +26,8 @@ public:
   }
 };
 
-
-
-
 class Wish {
 private:
- 
   int Balance;          //저축조건액
   vector<Checklist> checklist; // 체크리스트 목록
   Date date;                   // 목표날짜
@@ -39,7 +35,6 @@ private:
   bool isCompleted;          // 완료 여부
 
 public:
-
   string name;
 
   //이름으로 생성. 해금x완료x
@@ -52,11 +47,11 @@ public:
 
   void setBalance(int bal, int currBalance) {
       Balance = bal;
-      TryUnlock(currBalance);
+      tryUnlock(currBalance);
     }
   void setDate(Date dt, int currBalance) {
     date = dt;
-    TryUnlock(currBalance);
+    tryUnlock(currBalance);
   }
 
   bool getIsUnlocked()const {

@@ -1,6 +1,6 @@
 #pragma once
 #include <ctime>
-#include "Wishfunc.h"
+#include "Wish.h"
 using namespace std;
 
 class Wishlist {

@@ -1,9 +1,8 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <vector>
-#include <fstream>
 #include <ctime>
-#include "Wishfunc.h"
+#include "Wish.h"
 using namespace std;
 
 
@@ -15,6 +14,8 @@ void Wish::completeCheck(int idx, bool achieve, int currBalance) {
 }
 
 void Wish::tryUnlock(int currBalance) {
+
+	bool was = isUnlocked;
 
 	//저축액
 	if (Balance == 0 && checklist.empty() && date.year == 0000) {
@@ -57,6 +58,6 @@ void Wish::tryUnlock(int currBalance) {
 
 	isUnlocked = true;
 	//임시
-	if (isUnlocked == true) { cout << name << " 해금!" <<endl; }
+	if (!was&&isUnlocked) { cout << name << " 해금!" <<endl; }
 }
 

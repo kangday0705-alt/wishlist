@@ -36,30 +36,47 @@ int main() {
     }
     else if (choice == 2) {
       string name;
-      int balance;
+      int balance = 0;
+      Date targetDate = { 0,0,0 }; // 날짜를 입력받을 구조체 변수 추가
 
       cout << "Wish Name: ";
       cin >> name;
-      cout << "Target Balance: ";
-      cin >> balance;
+      char a;
+      cout << "Use Target Balance? (y/n): ";
+      cin >> a;
+      if (a == 'y') {
+        cout << "Target Balance: ";
+        cin >> balance;
+      }
 
+      // [추가] 목표 날짜 입력받기 (제한을 안 두려면 0 0 0 입력 가능)
+      cout << "Use Target Date? (y/n): ";
+      cin >> a;
+      if (a == 'y') {
+        cout << "Target Date (Year Month Day, e.g., 2026 12 31): ";
+        cin >> targetDate.year >> targetDate.month >> targetDate.day;
+      }
       Wish newWish(name);
+
+      // 1. 저축액 조건 설정
       newWish.setBalance(balance, manager.getcurrBalance());
 
-      manager.addwish(newWish);
-      cout << ">> Added successfully!" << endl;
+      // 2. [추가] 날짜 조건 설정 및 자동 해금 조건 판단
+      newWish.setDate(targetDate, manager.getcurrBalance());
 
-      // [추가] 위시가 새로 추가되었으므로 즉시 파일에 저장합니다.
+      manager.addwish(newWish);
+      cout << ">> Added successfully with target date!" << endl;
+
       manager.saveToFile();
     }
     else if (choice == 3) {
       int money;
-      cout << "Current Balance: " << manager.getcurrBalance() << "元" << endl;
+      cout << "Current Balance: " << manager.getcurrBalance() << endl;
       cout << "Money to Save: ";
       cin >> money;
 
       manager.addcurrBalance(money);
-      cout << ">> Saved successfully! Total Balance: " << manager.getcurrBalance() << "元" << endl;
+      cout << ">> Saved successfully! Total Balance: " << manager.getcurrBalance() << endl;
 
       // [추가] 잔액이 변동되었으므로 즉시 파일에 저장합니다.
       manager.saveToFile();
@@ -102,7 +119,7 @@ int main() {
         int chkIdx;
         cout << "Enter Checklist Index to Complete: ";
         cin >> chkIdx;
-        target.completecheck(chkIdx, manager.getcurrBalance());
+        target.completeCheck(chkIdx, 1, manager.getcurrBalance());
         cout << ">> Task completed!" << endl;
 
         // [추가] 체크리스트 완료 상태 변경사항 저장
