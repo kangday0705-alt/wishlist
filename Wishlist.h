@@ -11,13 +11,15 @@ private:
 public:
   Wishlist() :currBalance(0) {}
 
-  int getcurrBalance() const { return currBalance; }
+  int getcurrBalance() const {
+    return currBalance;
+  }
   void addcurrBalance(int bal) {
     currBalance += bal;
     updateAllwish();
   }
   void addwish(Wish newWish) {
-    newWish.TryUnlock(currBalance);
+    newWish.tryUnlock(currBalance);
     wlist.push_back(newWish);
   }
   void deletewish(int idx) {
@@ -26,24 +28,20 @@ public:
     }
     return;
   }
-  void showwishlist() const;
-
+  
   void updateAllwish() {
     for (Wish& w : wlist) {
-      w.TryUnlock(currBalance);
+      w.tryUnlock(currBalance);
     }
   }
 
   Wish& getwish(int idx) {
-    if (0 <= idx && idx < wlist.size()) {
-      return wlist[idx];
-    }
+    return wlist.at(idx);
   }
-  vector<Wish> getlockedwish() const;
-  vector<Wish> getunlockedwish() const;
 
   void saveToFile();
   void loadFromFile();
-
+  //юс╫ц
+  void showwishlist() const;
 };
 

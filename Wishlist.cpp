@@ -2,44 +2,21 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <ctime>
 #include <sstream>
 #include "Wishlist.h"
 using namespace std;
 
-
-vector<Wish> Wishlist::getlockedwish() const {
-	vector<Wish> locked;
-	for (Wish att : wlist) {
-		if (!att.getIsUnlocked()) {
-			locked.push_back(att);
-		}
-	}
-	return locked;
-}
-
-vector<Wish> Wishlist::getunlockedwish() const {
-	vector<Wish> unlocked;
-	for (Wish att : wlist) {
-		if (att.getIsUnlocked()) {
-			unlocked.push_back(att);
-		}
-	}
-	return unlocked;
-}
-
+//임시
 void Wishlist::showwishlist() const {
 	for (int i = 0; i < wlist.size(); ++i) {
 		cout << i << ". " << wlist[i].name
-			<< " " << (wlist[i].getIsUnlocked() ? "해금" : "잠금") << endl;
-
+			<< (wlist[i].getIsUnlocked() ? " 해금" : " 잠금") << endl;
 	}
 }
 
 void Wishlist::saveToFile() {
 	ofstream outFile("wishlist.txt");
 	if (!outFile.is_open()) {
-		cerr << "파일열기실패" << endl;
 		return;
 	}
 	outFile << currBalance << endl;
@@ -68,5 +45,5 @@ void Wishlist::loadFromFile() {
 		twish.getcont(con);
 		wlist.push_back(twish);
 	}
-
+	updateAllwish();
 }
