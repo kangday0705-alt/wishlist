@@ -3,7 +3,10 @@
 #include <vector>
 #include <sstream>
 #include <string>
+#include <nlohmann/json.hpp>
+
 using namespace std;
+using json = nlohmann::json;
 
 class Date {
 public:
@@ -14,7 +17,7 @@ public:
 
 class Checklist {
 private:
-  bool isCheckAchieved = false;  // 체크리스트 달성
+  bool isCheckAchieved = false;
 
 public:
   string check;
@@ -24,15 +27,21 @@ public:
   void setisCheckAchieved(bool b) {
     isCheckAchieved = b;
   }
+  json tojson() {
+    json j;
+    j["check"] = check;
+    j["ischeck"] = isCheckAchieved;
+    return j;
+  }
 };
 
 class Wish {
 private:
-  int Balance;          //저축조건액
-  vector<Checklist> checklist; // 체크리스트 목록
-  Date date;                   // 목표날짜
-  bool isUnlocked;           // 해금 여부
-  bool isCompleted;          // 완료 여부
+  int Balance;
+  vector<Checklist> checklist;
+  Date date;
+  bool isUnlocked;
+  bool isCompleted;
 
 public:
   string name;
@@ -72,47 +81,84 @@ public:
   void completeCheck(int idx, bool, int);
   void tryUnlock(int currBalance);
 
+  json jcontent() {
+    json j;
 
-  //위시의 전체 정보가 담긴 문자열
-  string content() {
-    stringstream con;
-    con << name << ";"
-      << Balance << ";"
-      << date.year << ";"
-      << date.month << ";"
-      << date.day << ";"
-      << isUnlocked << ";"
-      << isCompleted << ";"
-      << checklist.size() << ";";
+    j["name"] = name;
+    j["balance"] = Balance;
+    j["year"] = date.year;
+    j["month"] = date.month;
+    j["day"] = date.day;
+    j["isunlocked"] = isUnlocked;
+    j["iscompleted"] = isCompleted;
 
-    for (Checklist& c : checklist) {
-      con << c.check << ";" << c.getisCheckAchieved() << ";";
+    json arr=json::array();
+
+    for (Checklist c : checklist) {
+      arr.push_back(c.tojson());
     }
+    j["checklist"] = arr;
 
-    return con.str();
+    return j;
   }
-  //위시의 전체정보 문자열 읽기
-  void getcont(stringstream& con) {
-    string temp;
-    getline(con, name, ';');
-    getline(con, temp, ';'); Balance = stoi(temp);
-    getline(con, temp, ';'); date.year = stoi(temp);
-    getline(con, temp, ';'); date.month = stoi(temp);
-    getline(con, temp, ';'); date.day = stoi(temp);
-    getline(con, temp, ';'); isUnlocked = stoi(temp);
-    getline(con, temp, ';'); isCompleted = stoi(temp);
-    getline(con, temp, ';');
-    int size = stoi(temp);
+
+  void jtowish(json j) {
+    name = j["name"];
+    Balance = j["balance"];
+    date.year = j["year"];
+    date.month = j["month"];
+    date.day = j["day"];
+    isUnlocked = j["isunlocked"];
+    isCompleted = j["iscompleted"];
 
     checklist.clear();
-    for (int i = 0; i < size; i++) {
+
+    for (json i : j["checklist"]) {
       Checklist c;
-      getline(con, c.check, ';'); //이름읽기
-      getline(con, temp, ';'); //isAchived
-      c.setisCheckAchieved(stoi(temp));
+      c.check = i["check"];
+      c.setisCheckAchieved(i["ischeck"]);
       checklist.push_back(c);
     }
   }
+
+  ////위시의 전체 정보가 담긴 문자열
+  //string content() {
+  //  stringstream con;
+  //  con << name << ";"
+  //    << Balance << ";"
+  //    << date.year << ";"
+  //    << date.month << ";"
+  //    << date.day << ";"
+  //    << isUnlocked << ";"
+  //    << isCompleted << ";"
+  //    << checklist.size() << ";";
+  //  for (Checklist& c : checklist) {
+  //    con << c.check << ";" << c.getisCheckAchieved() << ";";
+  //  }
+  //  return con.str();
+  //}
+
+  ////위시의 전체정보 문자열 읽기
+  //void getcont(stringstream& con) {
+  //  string temp;
+  //  getline(con, name, ';');
+  //  getline(con, temp, ';'); Balance = stoi(temp);
+  //  getline(con, temp, ';'); date.year = stoi(temp);
+  //  getline(con, temp, ';'); date.month = stoi(temp);
+  //  getline(con, temp, ';'); date.day = stoi(temp);
+  //  getline(con, temp, ';'); isUnlocked = stoi(temp);
+  //  getline(con, temp, ';'); isCompleted = stoi(temp);
+  //  getline(con, temp, ';');
+  //  int size = stoi(temp);
+  //  checklist.clear();
+  //  for (int i = 0; i < size; i++) {
+  //    Checklist c;
+  //    getline(con, c.check, ';'); //이름읽기
+  //    getline(con, temp, ';'); //isAchived
+  //    c.setisCheckAchieved(stoi(temp));
+  //    checklist.push_back(c);
+  //  }
+  //}
 
   void buyWish() {
     if (isUnlocked) {
