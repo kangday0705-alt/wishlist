@@ -17,7 +17,7 @@ void Wish::tryUnlock(int currBalance) {
 
 	bool was = isUnlocked;
 
-	//ÀúÃà¾×
+	//ì €ì¶•ì•¡
 	if (Balance == 0 && checklist.empty() && date.year == 0000) {
 		isUnlocked = false;
 		return;
@@ -26,7 +26,7 @@ void Wish::tryUnlock(int currBalance) {
 		isUnlocked = false; return;
 	}
 
-	//Ã¼Å©¸®½ºÆ®
+	//ì²´í¬ë¦¬ìŠ¤íŠ¸
 	if (!checklist.empty()) {
 		for (int i = 0; i < checklist.size(); i++) {
 			if (!checklist[i].getisCheckAchieved()) {
@@ -35,7 +35,7 @@ void Wish::tryUnlock(int currBalance) {
 		}
 	}
 
-	//³¯Â¥
+	//ë‚ ì§œ
 	time_t timer = time(NULL);
 	struct tm* t = localtime(&timer);
 	int todayYear = t->tm_year + 1900;
@@ -57,7 +57,7 @@ void Wish::tryUnlock(int currBalance) {
 	}
 
 	isUnlocked = true;
-	//ÀÓ½Ã
-	if (!was&&isUnlocked) { cout << name << " ÇØ±İ!" <<endl; }
+	//ì„ì‹œ
+	if (!was&&isUnlocked) { cout << name << " í•´ê¸ˆ!" <<endl; }
 }
 
