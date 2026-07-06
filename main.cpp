@@ -109,7 +109,7 @@ int main() {
         string task;
         cout << "Enter Task Name: ";
         cin >> task;
-        target.addchecklist(task);
+        target.addChecklist(task);
         cout << ">> Task added!" << endl;
 
         // [추가] 체크리스트 변경사항 저장
@@ -119,7 +119,7 @@ int main() {
         int chkIdx;
         cout << "Enter Checklist Index to Complete: ";
         cin >> chkIdx;
-        target.completeCheck(chkIdx, 1, manager.getcurrBalance());
+        target.achieveChecklist(chkIdx, 1, manager.getcurrBalance());
         cout << ">> Task completed!" << endl;
 
         // [추가] 체크리스트 완료 상태 변경사항 저장

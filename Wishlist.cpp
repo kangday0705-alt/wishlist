@@ -16,7 +16,7 @@ void Wishlist::showwishlist() const {
 		cout << i << ". " << wlist[i].name
 			<< (wlist[i].getIsUnlocked() ? " 해금" : " 잠금") << endl;
 	}
-}
+} 
 
 void Wishlist::saveToFile() {
 
@@ -30,7 +30,7 @@ void Wishlist::saveToFile() {
 	all["wishlist"] = json::array();
 
 	for (Wish& wish : wlist) {
-		all["wishlist"].push_back(wish.jcontent());
+		all["wishlist"].push_back(wish.tojson());
 	}
 	outFile << all;
 	outFile.close();
@@ -51,47 +51,9 @@ void Wishlist::loadFromFile() {
 
 	for (const json& item : all["wishlist"]) {
 		Wish w;
-		w.jtowish(item);
+		w.fromjson(item);
 		wlist.push_back(w);
 	}
 
-	updateAllwish();
+	tryUnlockAllwish();
 }
-
-/*void Wishlist::saveToFile() {
-
-	ofstream outFile("wishlist.txt");
-	if (!outFile.is_open()) {
-		return;
-	}
-	outFile << currBalance << endl;
-
-	for (Wish& wish : wlist) {
-		json i;
-		i["name"] = wish.name;
-	
-		outFile << wish.content() << endl;
-	}
-	outFile.close();
-}
-
-void Wishlist::loadFromFile() {
-	ifstream inFile("wishlist.txt");
-
-	if (!inFile.is_open()) {
-		return;
-	}
-	wlist.clear();
-
-	inFile >> currBalance;
-	inFile.ignore();
-
-	string line;
-	while (getline(inFile, line)) {
-		stringstream con(line);
-		Wish twish;
-		twish.getcont(con);
-		wlist.push_back(twish);
-	}
-	updateAllwish();
-}*/

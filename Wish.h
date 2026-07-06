@@ -69,19 +69,19 @@ public:
   bool getIsCompleted()const {
     return isCompleted;
   }
-  vector<Checklist>& getchecklist() {
+  vector<Checklist>& getChecklist() {
     return checklist;
   }
 
-  void addchecklist(string cont){
+  void addChecklist(string cont){
     Checklist temp;
     temp.check = cont;
     checklist.push_back(temp);
   }
-  void completeCheck(int idx, bool, int);
+  void achieveChecklist(int idx, bool, int);
   void tryUnlock(int currBalance);
 
-  json jcontent() {
+  json tojson() {
     json j;
 
     j["name"] = name;
@@ -102,7 +102,7 @@ public:
     return j;
   }
 
-  void jtowish(json j) {
+  void fromjson(json j) {
     name = j["name"];
     Balance = j["balance"];
     date.year = j["year"];
@@ -120,45 +120,6 @@ public:
       checklist.push_back(c);
     }
   }
-
-  ////위시의 전체 정보가 담긴 문자열
-  //string content() {
-  //  stringstream con;
-  //  con << name << ";"
-  //    << Balance << ";"
-  //    << date.year << ";"
-  //    << date.month << ";"
-  //    << date.day << ";"
-  //    << isUnlocked << ";"
-  //    << isCompleted << ";"
-  //    << checklist.size() << ";";
-  //  for (Checklist& c : checklist) {
-  //    con << c.check << ";" << c.getisCheckAchieved() << ";";
-  //  }
-  //  return con.str();
-  //}
-
-  ////위시의 전체정보 문자열 읽기
-  //void getcont(stringstream& con) {
-  //  string temp;
-  //  getline(con, name, ';');
-  //  getline(con, temp, ';'); Balance = stoi(temp);
-  //  getline(con, temp, ';'); date.year = stoi(temp);
-  //  getline(con, temp, ';'); date.month = stoi(temp);
-  //  getline(con, temp, ';'); date.day = stoi(temp);
-  //  getline(con, temp, ';'); isUnlocked = stoi(temp);
-  //  getline(con, temp, ';'); isCompleted = stoi(temp);
-  //  getline(con, temp, ';');
-  //  int size = stoi(temp);
-  //  checklist.clear();
-  //  for (int i = 0; i < size; i++) {
-  //    Checklist c;
-  //    getline(con, c.check, ';'); //이름읽기
-  //    getline(con, temp, ';'); //isAchived
-  //    c.setisCheckAchieved(stoi(temp));
-  //    checklist.push_back(c);
-  //  }
-  //}
 
   void buyWish() {
     if (isUnlocked) {

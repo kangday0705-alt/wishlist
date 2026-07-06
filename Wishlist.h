@@ -16,7 +16,7 @@ public:
   }
   void addcurrBalance(int bal) {
     currBalance += bal;
-    updateAllwish();
+    tryUnlockAllwish();
   }
   void addwish(Wish newWish) {
     newWish.tryUnlock(currBalance);
@@ -29,7 +29,7 @@ public:
     return;
   }
   
-  void updateAllwish() {
+  void tryUnlockAllwish() {
     for (Wish& w : wlist) {
       w.tryUnlock(currBalance);
     }

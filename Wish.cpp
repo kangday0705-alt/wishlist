@@ -6,7 +6,7 @@
 using namespace std;
 
 
-void Wish::completeCheck(int idx, bool achieve, int currBalance) {
+void Wish::achieveChecklist(int idx, bool achieve, int currBalance) {
 	if (0 <=idx && idx < checklist.size()) {
 		checklist[idx].setisCheckAchieved(achieve);
 		tryUnlock(currBalance);
