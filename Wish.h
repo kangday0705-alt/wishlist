@@ -71,6 +71,16 @@ public:
     return checklist;
   }
 
+  int getBalance() const { return Balance; }
+  Date getDate() const { return date; }
+
+  const vector<Checklist>& getChecklistConst() const {
+      return checklist;
+  }
+  void setChecklist(vector<Checklist> cl) {
+      checklist = cl;
+  }
+
   void addChecklist(string cont){
     Checklist temp;
     temp.check = cont;

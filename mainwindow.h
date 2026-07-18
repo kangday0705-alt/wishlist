@@ -20,6 +20,9 @@ public:
 private slots:
     void on_btnadd_clicked();
 
+
+    void on_btnbuy_clicked();
+
 private:
     Ui::MainWindow *ui;
 

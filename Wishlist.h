@@ -13,6 +13,10 @@ public:
   int getcurrBalance() const {
     return currBalance;
   }
+  int size() const {
+      return wlist.size();
+  }
+
   void addcurrBalance(int bal) {
     currBalance += bal;
     tryUnlockAllwish();
@@ -40,7 +44,7 @@ public:
 
   void saveToFile();
   void loadFromFile();
-  //юс╫ц
+
   void showwishlist() const;
   void buyWish(int idx) {
     wlist[idx].buyWish();

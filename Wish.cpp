@@ -16,7 +16,6 @@ void Wish::achieveChecklist(int idx, bool achieve, int currBalance) {
 void Wish::tryUnlock(int currBalance) {
 	bool was = isUnlocked;
 
-	//저축액
 	if (Balance == 0 && checklist.empty() && date.year == 0000) {
 		isUnlocked = false;
 		return;
@@ -24,7 +23,7 @@ void Wish::tryUnlock(int currBalance) {
 	if (currBalance < Balance) {
 		isUnlocked = false; return;
 	}
-	//체크리스트
+
 	if (!checklist.empty()) {
 		for (int i = 0; i < checklist.size(); i++) {
 			if (!checklist[i].getisCheckAchieved()) {
@@ -32,7 +31,7 @@ void Wish::tryUnlock(int currBalance) {
 			}
 		}
 	}
-	//날짜
+
 	time_t timer = time(NULL);
 	struct tm* t = localtime(&timer);
 	int todayYear = t->tm_year + 1900;
@@ -53,9 +52,9 @@ void Wish::tryUnlock(int currBalance) {
 		}
 	}
 	isUnlocked = true;
-	//임시
+
 	if (!was && isUnlocked) {
-		cout << name << " 해금 !" << endl;
+        cout << name << " unlock !" << endl;
 	}
 }
 
