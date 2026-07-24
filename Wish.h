@@ -77,8 +77,9 @@ public:
   const vector<Checklist>& getChecklistConst() const {
       return checklist;
   }
-  void setChecklist(vector<Checklist> cl) {
+  void setChecklist(vector<Checklist> cl, int currBalance) {
       checklist = cl;
+      tryUnlock(currBalance);
   }
 
   void addChecklist(string cont){

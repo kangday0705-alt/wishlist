@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include "Wishlist.h"
 #include <QMainWindow>
+#include <QListWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,13 +20,13 @@ public:
 
 private slots:
     void on_btnadd_clicked();
-
-
     void on_btnbuy_clicked();
+    void on_listwish_itemClicked(QListWidgetItem *item);
+
+    void on_btnsave_clicked();
 
 private:
     Ui::MainWindow *ui;
-
     Wishlist wishlist;
 };
 #endif // MAINWINDOW_H
