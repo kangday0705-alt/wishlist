@@ -21,6 +21,7 @@ public:
     currBalance += bal;
     tryUnlockAllwish();
   }
+
   void addwish(Wish newWish) {
     newWish.tryUnlock(currBalance);
     wlist.push_back(newWish);

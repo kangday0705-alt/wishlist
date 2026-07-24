@@ -18,6 +18,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+    void refreshList();
+    void refreshBalance();
+
 private slots:
     void on_btnadd_clicked();
     void on_btnbuy_clicked();
