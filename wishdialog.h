@@ -15,6 +15,10 @@ class WishDialog : public QDialog
 public:
     explicit WishDialog(QWidget *parent = nullptr, const Wish *wish =nullptr);
     ~WishDialog();
+    QString getName();
+    int getBalance();
+    Date getDate();
+    vector<Checklist> getChecklist();
 
 private slots:
     void on_btnadd_clicked();

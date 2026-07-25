@@ -11,6 +11,11 @@ public:
   int year;
   int month;
   int day;
+  Date (int y, int m, int d){
+    year = y;
+    month = m;
+    day = d;
+  }
 };
 
 class Checklist {
@@ -19,7 +24,7 @@ private:
 
 public:
   string check;
-  bool getisCheckAchieved() {
+  bool getisCheckAchieved() const {
     return isCheckAchieved;
   }
   void setisCheckAchieved(bool b) {

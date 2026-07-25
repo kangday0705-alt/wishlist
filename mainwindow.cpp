@@ -5,6 +5,7 @@
 #include <QInputDialog>
 
 
+//생성자
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     refreshList();
 }
 
+//소멸자
 MainWindow::~MainWindow(){
 
     wishlist.saveToFile();
@@ -27,6 +29,7 @@ void MainWindow::on_btnadd_clicked()
 {
     WishDialog dialog(this);
     dialog.exec();
+    //
 }
 
 
@@ -52,9 +55,10 @@ void MainWindow::on_listwish_itemClicked(QListWidgetItem *item)
 {
     WishDialog dialog(this);
     dialog.exec();
+    //
 }
 
-
+//저축
 void MainWindow::on_btnsave_clicked()
 {
     bool ok;
@@ -67,6 +71,7 @@ void MainWindow::on_btnsave_clicked()
     }
 }
 
+
 void MainWindow::refreshList(){
     ui->listwish->clear();
 
@@ -74,7 +79,6 @@ void MainWindow::refreshList(){
         ui->listwish->addItem(QString::fromStdString(wishlist.getwish(i).name));
     }
 }
-
 
 void MainWindow::refreshBalance(){
     ui->labelbalance->setText("현재 잔고: " + QString::number(wishlist.getcurrBalance()) +"원");
