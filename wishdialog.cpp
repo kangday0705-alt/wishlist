@@ -36,7 +36,7 @@ void WishDialog::on_btnadd_clicked()
 {
     bool ok;
     QString name = QInputDialog::getText(this, "체크리스트 추가", "추가할 체크리스트", QLineEdit::Normal, "", &ok);
-    if(ok){
+    if(ok&&!name.isEmpty()){
         QListWidgetItem *item = new QListWidgetItem(name);
         item->setFlags(item->flags()|Qt::ItemIsUserCheckable);
         item->setCheckState(Qt::Unchecked);
@@ -47,7 +47,7 @@ void WishDialog::on_btnadd_clicked()
 //위시삭제
 void WishDialog::on_pushButton_clicked()
 {
-    if(QMessageBox::warning(this,"경고","위시를 삭제할까요?")){
+    if(QMessageBox::question(this,"경고","위시를 삭제할까요?")==QMessageBox::Yes){
         done(2);
     }
 
@@ -72,7 +72,7 @@ int WishDialog::getBalance()
 Date WishDialog::getDate()
 {
     QDate d = ui->dateEdit->date();
-    return Date(d.year(),d.year(),d.year());
+    return Date(d.year(),d.month(),d.day());
 }
 
 vector<Checklist> WishDialog::getChecklist()
@@ -80,7 +80,7 @@ vector<Checklist> WishDialog::getChecklist()
     vector<Checklist> rt;
     for(int i = 0; i<ui->checklist->count();i++){
         Checklist c;
-        c.setisCheckAchieved(ui->checklist->item(i)->checkState());
+        c.setisCheckAchieved(ui->checklist->item(i)->checkState()==Qt::Checked);
         c.check=ui->checklist->item(i)->text().toStdString();
         rt.push_back(c);
     }

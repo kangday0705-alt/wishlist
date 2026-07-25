@@ -28,8 +28,18 @@ MainWindow::~MainWindow(){
 void MainWindow::on_btnadd_clicked()
 {
     WishDialog dialog(this);
-    dialog.exec();
-    //
+    if(dialog.exec()==1){
+
+        Wish w;
+        w.name=dialog.getName().toStdString();
+        w.setBalance(dialog.getBalance(), wishlist.getcurrBalance());
+        w.setDate(dialog.getDate(), wishlist.getcurrBalance());
+        w.setChecklist(dialog.getChecklist(), wishlist.getcurrBalance());
+
+        wishlist.addwish(w);
+
+        refreshList();
+    }
 }
 
 
@@ -51,11 +61,28 @@ void MainWindow::on_btnbuy_clicked()
 }
 
 //위시 수정
-void MainWindow::on_listwish_itemClicked(QListWidgetItem *item)
+void MainWindow::on_listwish_itemClicked()
 {
-    WishDialog dialog(this);
-    dialog.exec();
-    //
+    Wish &w = wishlist.getwish(ui->listwish->currentRow());
+
+    WishDialog dialog(this, &w);
+    int re = dialog.exec();
+
+    if(re==1){
+
+    w.name=dialog.getName().toStdString();
+    w.setBalance(dialog.getBalance(), wishlist.getcurrBalance());
+    w.setDate(dialog.getDate(), wishlist.getcurrBalance());
+    w.setChecklist(dialog.getChecklist(), wishlist.getcurrBalance());
+
+    refreshList();
+    }
+
+    if(re==2){
+        wishlist.deletewish(ui->listwish->currentRow());
+        refreshList();
+    }
+
 }
 
 //저축

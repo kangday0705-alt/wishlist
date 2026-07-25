@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 
 //юс╫ц
-void Wishlist::showwishlist() const {
+/*void Wishlist::showwishlist() const {
 
 	for (int i = 0; i < wlist.size(); ++i) {
 		if (!wlist[i].getIsCompleted()) {
@@ -25,7 +25,7 @@ void Wishlist::showwishlist() const {
 		}
 	}
 }
-
+*/
 void Wishlist::saveToFile() {
 
 	ofstream outFile("wishlist.json");

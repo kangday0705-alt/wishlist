@@ -24,7 +24,7 @@ public:
 private slots:
     void on_btnadd_clicked();
     void on_btnbuy_clicked();
-    void on_listwish_itemClicked(QListWidgetItem *item);
+    void on_listwish_itemClicked();
 
     void on_btnsave_clicked();
 
