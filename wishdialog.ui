@@ -48,6 +48,24 @@
      <height>111</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QListWidget {
+    background-color: #2B2B2B;
+    border: 1px solid #8EFAE1;
+    border-radius: 12px;
+    padding: 6px;
+}
+
+QListWidget::item {
+    padding: 4px;
+    border: none;
+}
+
+QListWidget::item:selected {
+    background-color: #3A514B;
+    border-radius: 6px;
+}</string>
+   </property>
   </widget>
   <widget class="QLineEdit" name="balanceEdit">
    <property name="geometry">
@@ -81,8 +99,14 @@
      <height>24</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid gray;
+border-radius: 8px;
+background-color: #8EFAE1;
+color: #2B2B2B;</string>
+   </property>
    <property name="text">
-    <string>추가</string>
+    <string>Add</string>
    </property>
   </widget>
   <widget class="QPushButton" name="btndelete">
@@ -94,8 +118,14 @@
      <height>24</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">border: 1px solid gray;
+border-radius: 8px;
+background-color: #8EFAE1;
+color: #2B2B2B;</string>
+   </property>
    <property name="text">
-    <string>삭제</string>
+    <string>Delete</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
@@ -108,7 +138,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>위시 삭제</string>
+    <string>Delete Wish</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -116,12 +146,12 @@
     <rect>
      <x>30</x>
      <y>40</y>
-     <width>51</width>
+     <width>71</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>위시 이름</string>
+    <string>Wish name</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_2">
@@ -129,12 +159,12 @@
     <rect>
      <x>30</x>
      <y>90</y>
-     <width>51</width>
+     <width>81</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>목표 금액</string>
+    <string>Savings Goal</string>
    </property>
   </widget>
   <widget class="QLabel" name="label_3">
@@ -147,7 +177,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>체크리스트</string>
+    <string>Checklist</string>
    </property>
   </widget>
  </widget>

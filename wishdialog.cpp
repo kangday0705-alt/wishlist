@@ -10,6 +10,7 @@ WishDialog::WishDialog(QWidget *parent, const Wish *nwish)
 {
     ui->setupUi(this);
     if(nwish){
+
         ui->nameEdit->setText(QString::fromStdString(nwish->name));
         ui->balanceEdit->setText(QString::number(nwish->getBalance()));
         ui->dateEdit->setDate(QDate(nwish->getDate().year, nwish->getDate().month, nwish->getDate().day));
@@ -20,9 +21,21 @@ WishDialog::WishDialog(QWidget *parent, const Wish *nwish)
             item->setCheckState(c.getisCheckAchieved()? Qt::Checked : Qt::Unchecked);
             ui->checklist->addItem(item);
         }
+
+        if(nwish->getIsCompleted()){
+            ui->nameEdit->setReadOnly(true);
+            ui->balanceEdit->setReadOnly(true);
+
+            ui->dateEdit->setEnabled(false);
+            ui->btnadd->hide();
+            ui->btndelete->hide();
+
+            ui->buttonBox->button(QDialogButtonBox::Ok)->hide();
+            ui->buttonBox->button(QDialogButtonBox::Cancel)->hide();
+        }
     }
     else{
-        ui->btndelete->hide();
+        ui->pushButton->hide();
     }
 }
 
@@ -35,7 +48,7 @@ WishDialog::~WishDialog()
 void WishDialog::on_btnadd_clicked()
 {
     bool ok;
-    QString name = QInputDialog::getText(this, "체크리스트 추가", "추가할 체크리스트", QLineEdit::Normal, "", &ok);
+    QString name = QInputDialog::getText(this, "Add Checklist", "New Checklist Item", QLineEdit::Normal, "", &ok);
     if(ok&&!name.isEmpty()){
         QListWidgetItem *item = new QListWidgetItem(name);
         item->setFlags(item->flags()|Qt::ItemIsUserCheckable);
@@ -47,7 +60,7 @@ void WishDialog::on_btnadd_clicked()
 //위시삭제
 void WishDialog::on_pushButton_clicked()
 {
-    if(QMessageBox::question(this,"경고","위시를 삭제할까요?")==QMessageBox::Yes){
+    if(QMessageBox::question(this,"경고","Delete this wish?")==QMessageBox::Yes){
         done(2);
     }
 

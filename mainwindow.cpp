@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "wishdialog.h"
+#include "historydialog.h"
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -11,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     wishlist.loadFromFile();
     refreshBalance();
     refreshList();
@@ -46,15 +46,20 @@ void MainWindow::on_btnadd_clicked()
 //위시구매(완료후삭제)
 void MainWindow::on_btnbuy_clicked()
 {
-    int idx = ui->listwish->currentRow();
+    int idx = ui->listwish->currentItem()->data(Qt::UserRole).toInt();
 
     if(idx==-1){
-        QMessageBox::warning(this,"알림","완료할 위시를 선택하세요");
+        QMessageBox::warning(this,"알림","Select a wish to complete.");
     }
     else{
-        if(QMessageBox::question(this,"알림",QString::fromStdString(wishlist.getwish(idx).name)+"완료한 위시는 삭제됩니다")==QMessageBox::Yes)
+        if(QMessageBox::question(this,"알림",QString::fromStdString(wishlist.getwish(idx).name)+": Completed wishes are moved to History.")==QMessageBox::Yes)
         {
-            wishlist.deletewish(idx);
+            if(!wishlist.getwish(idx).getIsUnlocked()){
+                QMessageBox::warning(this,"알림",QString::fromStdString(wishlist.getwish(idx).name)+" is locked.");
+            }
+            wishlist.getwish(idx).buyWish();
+
+            //wishlist.deletewish(idx);
             refreshList();
         }
     }
@@ -63,7 +68,7 @@ void MainWindow::on_btnbuy_clicked()
 //위시 수정
 void MainWindow::on_listwish_itemClicked()
 {
-    Wish &w = wishlist.getwish(ui->listwish->currentRow());
+    Wish &w = wishlist.getwish(ui->listwish->currentItem()->data(Qt::UserRole).toInt());
 
     WishDialog dialog(this, &w);
     int re = dialog.exec();
@@ -79,7 +84,7 @@ void MainWindow::on_listwish_itemClicked()
     }
 
     if(re==2){
-        wishlist.deletewish(ui->listwish->currentRow());
+        wishlist.deletewish(ui->listwish->currentItem()->data(Qt::UserRole).toInt());
         refreshList();
     }
 
@@ -89,12 +94,17 @@ void MainWindow::on_listwish_itemClicked()
 void MainWindow::on_btnsave_clicked()
 {
     bool ok;
-    int save = QInputDialog::getInt(this, "저축", "저축할 금액", 0, 0,100000000, 1000, &ok);
+    int save = QInputDialog::getInt(this, "Save", "Amount to Save", 0, -100000000, 100000000, 1000, &ok);
 
     if(ok){
-    wishlist.addcurrBalance(save);
-    refreshBalance();
-    refreshList();
+        if(save<-wishlist.getcurrBalance()){
+            QMessageBox::warning(this,"알림", "Cannot withdraw more than the current balance.");
+        }
+        else{
+        wishlist.addcurrBalance(save);
+        refreshBalance();
+        refreshList();
+        }
     }
 }
 
@@ -103,10 +113,35 @@ void MainWindow::refreshList(){
     ui->listwish->clear();
 
     for(int i=0; i<wishlist.size(); i++){
-        ui->listwish->addItem(QString::fromStdString(wishlist.getwish(i).name));
+        Wish &w = wishlist.getwish(i);
+
+        if(w.getIsUnlocked()&&!w.getIsCompleted()){
+            QListWidgetItem *item = new QListWidgetItem(QString("⭐ ")+QString::fromStdString(w.name));
+            item->setData(Qt::UserRole, i);
+            ui->listwish->addItem(item);
+        }
     }
+
+    for(int i=0; i<wishlist.size(); i++){
+        Wish &w = wishlist.getwish(i);
+
+        if(!w.getIsUnlocked()){
+            QListWidgetItem *item = new QListWidgetItem(QString("🔒 ")+QString::fromStdString(w.name));
+            item->setData(Qt::UserRole, i);
+            ui->listwish->addItem(item);
+        }
+    }
+
 }
 
 void MainWindow::refreshBalance(){
-    ui->labelbalance->setText("현재 잔고: " + QString::number(wishlist.getcurrBalance()) +"원");
+    ui->labelbalance->setText(QString::number(wishlist.getcurrBalance()) +" ₩");
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    HistoryDialog dialog(wishlist, this);
+    dialog.exec();
+
+}
+
