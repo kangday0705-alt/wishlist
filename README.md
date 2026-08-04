@@ -16,9 +16,9 @@
 
 ---
 
-<img width="1048" height="742" alt="image" src="https://github.com/user-attachments/assets/3bd7de00-0990-444e-bf87-a0d62b89f38e" />
-<img width="1054" height="744" alt="image" src="https://github.com/user-attachments/assets/ea2641e9-d1d8-4da4-895e-96e9cc700a91" />
-<img width="1042" height="740" alt="image" src="https://github.com/user-attachments/assets/b9428081-c584-4872-b495-f186a719f4fe" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/3bd7de00-0990-444e-bf87-a0d62b89f38e" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/ea2641e9-d1d8-4da4-895e-96e9cc700a91" />
+<img width="500" alt="image" src="https://github.com/user-attachments/assets/b9428081-c584-4872-b495-f186a719f4fe" />
 
 ---
 ## 🛠 사용 기술 (Tech Stack)
