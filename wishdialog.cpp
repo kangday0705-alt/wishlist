@@ -22,6 +22,7 @@ WishDialog::WishDialog(QWidget *parent, const Wish *nwish)
             ui->checklist->addItem(item);
         }
 
+        //히스토리
         if(nwish->getIsCompleted()){
             ui->nameEdit->setReadOnly(true);
             ui->balanceEdit->setReadOnly(true);
@@ -30,6 +31,11 @@ WishDialog::WishDialog(QWidget *parent, const Wish *nwish)
             ui->btnadd->hide();
             ui->btndelete->hide();
 
+            for(int i=0; i<ui->checklist->count();i++){
+                QListWidgetItem *item = ui->checklist->item(i);
+                item->setFlags(item->flags()&~Qt::ItemIsUserCheckable &~Qt::ItemIsEditable);
+
+            }
             ui->buttonBox->button(QDialogButtonBox::Ok)->hide();
             ui->buttonBox->button(QDialogButtonBox::Cancel)->hide();
         }
