@@ -43,15 +43,18 @@ void MainWindow::on_btnadd_clicked()
 }
 
 
-//위시구매(완료후삭제)
+//위시구매
 void MainWindow::on_btnbuy_clicked()
 {
-    int idx = ui->listwish->currentItem()->data(Qt::UserRole).toInt();
 
-    if(idx==-1){
+    QListWidgetItem *item =ui->listwish->currentItem();
+
+    if(item==nullptr){
         QMessageBox::warning(this,"알림","Select a wish to complete.");
     }
+
     else{
+        int idx = item->data(Qt::UserRole).toInt();
         if(QMessageBox::question(this,"알림",QString::fromStdString(wishlist.getwish(idx).name)+": Completed wishes are moved to History.")==QMessageBox::Yes)
         {
             if(!wishlist.getwish(idx).getIsUnlocked()){
@@ -66,7 +69,7 @@ void MainWindow::on_btnbuy_clicked()
 }
 
 //위시 수정
-void MainWindow::on_listwish_itemClicked()
+void MainWindow::on_listwish_itemDoubleClicked()
 {
     Wish &w = wishlist.getwish(ui->listwish->currentItem()->data(Qt::UserRole).toInt());
 
@@ -108,7 +111,6 @@ void MainWindow::on_btnsave_clicked()
     }
 }
 
-
 void MainWindow::refreshList(){
     ui->listwish->clear();
 
@@ -138,6 +140,7 @@ void MainWindow::refreshBalance(){
     ui->labelbalance->setText(QString::number(wishlist.getcurrBalance()) +" ₩");
 }
 
+//히스토리 열람
 void MainWindow::on_pushButton_clicked()
 {
     HistoryDialog dialog(wishlist, this);

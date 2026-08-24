@@ -17,7 +17,9 @@ void HistoryDialog::refreshlist()
 
     for(int i = 0; i<w.size();i++){
         if(w.getwish(i).getIsCompleted()){
-            ui->wishhistory->addItem(QString::fromStdString(w.getwish(i).name));
+            QListWidgetItem *item = new QListWidgetItem(QString::fromStdString(w.getwish(i).name));
+            item->setData(Qt::UserRole, i);
+            ui->wishhistory->addItem(item);
         }
     }
 }
@@ -32,7 +34,11 @@ void HistoryDialog::on_wishhistory_itemClicked(QListWidgetItem *item)
     Wish &W = w.getwish(ui->wishhistory->currentItem()->data(Qt::UserRole).toInt());
 
     WishDialog dialog(this, &W);
-    dialog.exec();
+    int re = dialog.exec();
+    if(re==2){
+        w.deletewish(ui->wishhistory->currentItem()->data(Qt::UserRole).toInt());
+        refreshlist();
+    }
 
 }
 

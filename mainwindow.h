@@ -24,7 +24,7 @@ public:
 private slots:
     void on_btnadd_clicked();
     void on_btnbuy_clicked();
-    void on_listwish_itemClicked();
+    void on_listwish_itemDoubleClicked();
 
     void on_btnsave_clicked();
 
