@@ -53,7 +53,7 @@ C++ 기반 GUI 개발 및 라이브러리 활용 능력 향상을 위한 프로�
 
 ## 🚀 시작하기 (Build & Run)
 
-### 빌드 및 실행 방법
+### 빌드 실행
 
 ```bash
 # 1. 빌드 디렉토리 생성 및 이동
@@ -64,4 +64,9 @@ cmake ..
 cmake --build .
 
 # 3. 프로그램 실행
-./WishlistManager
+./01wishQt
+```
+### exe실행
+
+1. **Releases** 에서 `wishlist.zip`다운로드
+2. 압축을 풀고 `01wishQt` 실행
